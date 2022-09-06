@@ -1,34 +1,70 @@
 <template>
 <div v-if="!verify">
-  <h1 class="text-3xl mt-52 text-center text-black my-4 dark:text-white">Регистрация</h1>
-  <form @submit.prevent="login()" class="w-full h-full mt-8 space-y-6 flex flex-col justify-center items-center" action="#" method="POST">
-      <input type="hidden" name="remember" value="true">
-      <div class="rounded-md shadow-sm -space-y-px">
-          <div>
-              <label for="Login" class="sr-only">Login</label>
-              <input id="Login" v-model="userLogin" name="Login" type="text" autocomplete="Login"
-                  required
-                  class="appearance-none rounded-none relative block px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-2xl lg:text-sm"
-                  placeholder="Логин">
-          </div>
-          <div>
-              <label for="password" class="sr-only">Password</label>
-              <input id="password" v-model="userPassword" name="password" type="password"
-                  autocomplete="current-password" required
-                  class="appearance-none rounded-none relative block px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-2xl lg:text-sm"
-                  placeholder="Пароль">
-          </div>
-      </div>
-      <div>
-          <button type="submit"
-              class="group relative text-center py-2 px-20 border border-transparent font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-2xl lg:text-sm">
-              Войти
-          </button>
-      </div>
-  </form>
+  <div class="flex justify-center mt-52">
+    <h1 class="cursor-pointer text-3xl text-center text-black my-4 dark:text-white" :class="isNeedRegistration ? 'underline' : 0" @click="showReg()">Регистрация</h1>
+    <div class="text-3xl text-center text-black my-4 dark:text-white">/</div>
+    <h1 class="cursor-pointer text-3xl text-center text-black my-4 dark:text-white" :class="!isNeedRegistration ? 'underline' : 0" @click="showAuth()">Авторизация</h1>
+  </div>
+  <div v-if="isNeedRegistration">
+    <div v-if="isUserRegistred" class="text-xl text-center text-red-400 my-2">Пользователь с данным именем уже зарегестрирован</div>
+    <form @submit.prevent="Verify()" class="w-full h-full mt-8 space-y-6 flex flex-col justify-center items-center" action="#" method="POST">
+        <input type="hidden" name="remember" value="true">
+        <div class="rounded-md shadow-sm -space-y-px">
+            <div>
+                <label for="Login" class="sr-only">Login</label>
+                <input id="Login" v-model="userLogin" name="Login" type="text" autocomplete="Login"
+                    required
+                    class="appearance-none rounded-none relative block px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-2xl lg:text-sm"
+                    placeholder="Логин">
+            </div>
+            <div>
+                <label for="password" class="sr-only">Password</label>
+                <input id="password" v-model="userPassword" name="password" type="password"
+                    autocomplete="current-password" required
+                    class="appearance-none rounded-none relative block px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-2xl lg:text-sm"
+                    placeholder="Пароль">
+            </div>
+        </div>
+        <div>
+            <button type="submit"
+                class="group relative text-center py-2 px-7 border border-transparent font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-2xl lg:text-sm">
+                Зарегестрироваться
+            </button>
+        </div>
+    </form>
+  </div>
+  <div v-else>
+    <div v-if="showMessage" class="text-xl text-center text-red-400 my-2">Данный пользователь не зарегестрирован</div>
+    <form @submit.prevent="Login()" class="w-full h-full mt-8 space-y-6 flex flex-col justify-center items-center" action="#" method="POST">
+        <input type="hidden" name="remember" value="true">
+        <div class="rounded-md shadow-sm -space-y-px">
+            <div>
+                <label for="Login" class="sr-only">Login</label>
+                <input id="Login" v-model="userLogin" name="Login" type="text" autocomplete="Login"
+                    required
+                    class="appearance-none rounded-none relative block px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-2xl lg:text-sm"
+                    placeholder="Логин">
+            </div>
+            <div>
+                <label for="password" class="sr-only">Password</label>
+                <input id="password" v-model="userPassword" name="password" type="password"
+                    autocomplete="current-password" required
+                    class="appearance-none rounded-none relative block px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-2xl lg:text-sm"
+                    placeholder="Пароль">
+            </div>
+        </div>
+        <div>
+            <button type="submit"
+                class="group relative text-center py-2 px-20 border border-transparent font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-2xl lg:text-sm">
+                Войти
+            </button>
+        </div>
+    </form>
+  </div>
 </div>
 <div v-else>
   <h1 class="text-3xl text-center text-black my-4 dark:text-white">Календарь алкоголика</h1>
+  <div class="cursor-pointer absolute top-4 right-10 text-black dark:text-white text-xl" @click="signOut()">Выйти</div>
   <div class="flex justify-between p-4">
     <div class="flex flex-col">
       <v-date-picker class="inline-block" v-model="date" :max-date="new Date()" :is-dark=isSearchActive>
@@ -88,7 +124,7 @@
         <div v-if="!isHard">
           <div v-for="item in this.attrs[1].dates" class="text-black flex justify-between border-b-2 py-2 border-black dark:text-white dark:border-white">
             {{item.toLocaleDateString()}}
-            <button @click="removeFromHard(item)">X</button>
+            <button @click="removeFromNotHard(item)">X</button>
           </div>
         </div>
       </div>
@@ -105,6 +141,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default{
   data() {
   const date = new Date();
@@ -115,6 +153,9 @@ export default{
       userPassword: "",
       verify: false,
       isHard: true,
+      showMessage: false,
+      isUserRegistred: false,
+      isNeedRegistration: true,
       date: new Date(),
       how: "heavily",
       attrs: [
@@ -123,20 +164,14 @@ export default{
             color: 'purple',
             fillMode: 'solid'
           },
-          dates: [
-            new Date(year, month, 12),
-            new Date(year, month, 10)
-          ]
+          dates: []
         },
         {
           highlight: {
             color: 'purple',
             fillMode: 'light',
           },
-          dates: [
-            new Date(year, month, 15),
-            new Date(year, month, 16)
-          ]
+          dates: []
         },
       ],
     };
@@ -145,16 +180,26 @@ export default{
     append(){
       if(this.how == "heavily"){
         this.attrs[0].dates.push(this.date)
+        this.submit()
       }
       else{
         this.attrs[1].dates.push(this.date)
+        this.submit()
       }
     },
     removeFromHard(item){
       this.attrs[0].dates = this.attrs[0].dates.filter((t) => t !== item)
+      this.submit()
     },
     removeFromNotHard(item){
       this.attrs[1].dates = this.attrs[1].dates.filter((t) => t !== item)
+      this.submit()
+    },
+    showAuth(){
+      this.isNeedRegistration = false
+    },
+    showReg(){
+      this.isNeedRegistration = true
     },
     showNotHard(){
       this.isHard = false
@@ -162,8 +207,42 @@ export default{
     showHard(){
       this.isHard = true
     },
-    login(){
-      console.log(this.userLogin,this.userPassword)
+    signOut(){
+      this.verify = false
+    },
+    async Verify(){
+      try {
+        let res = await axios.post("http://localhost:8023/api/registration", { login: this.userLogin, password: this.userPassword })
+        this.verify = true
+        localStorage.setItem("token", res.data.token)
+      }catch (error) {
+        console.log(error);
+        this.isUserRegistred = true
+      }
+    },
+    async Login(){
+      try {
+        let res = await axios.post("http://localhost:8023/api/login", { login: this.userLogin, password: this.userPassword })
+        this.verify = true
+        localStorage.setItem("token", res.data.token)
+      }catch (error) {
+        console.log(error);
+        this.showMessage = true
+      }
+    },
+    async submit() {
+    try{
+      let res = await axios.post("http://localhost:8023/api/submitData", { token: localStorage.getItem("token"), hardDays: this.attrs[0].dates, notHardDays: this.attrs[1].dates })
+    } catch(error){
+      console.log(error)
+    }
+  }
+  },
+  async unmounted() {
+    try{
+      let res = await axios.post("http://localhost:8023/api/submitData", { token: localStorage.getItem("token"),hardDays: this.attrs[0].dates, notHardDays: this.attrs[1].dates })
+    } catch(error){
+      console.log(error)
     }
   },
   computed: {
