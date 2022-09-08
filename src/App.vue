@@ -63,7 +63,7 @@
   </div>
 </div>
 <div v-else>
-  <h1 class="text-3xl text-center text-black my-4 dark:text-white">Календарь алкоголика</h1>
+  <h1 class="text-3xl text-center text-black my-4 dark:text-white">Алкалендарь</h1>
   <div class="cursor-pointer absolute top-4 right-10 text-black dark:text-white text-xl" @click="signOut()">Выйти</div>
   <div class="flex justify-between p-4">
     <div class="flex flex-col">
@@ -142,6 +142,7 @@
 
 <script>
 import axios from 'axios';
+import { get } from 'lodash';
 
 export default{
   data() {
@@ -178,6 +179,8 @@ export default{
   },
   methods:{
     append(){
+      this.attrs[0].dates = this.attrs[0].dates.filter((t) => t !== this.date)
+      this.attrs[1].dates = this.attrs[1].dates.filter((t) => t !== this.date)
       if(this.how == "heavily"){
         this.attrs[0].dates.push(this.date)
         this.submit()
@@ -209,12 +212,15 @@ export default{
     },
     signOut(){
       this.verify = false
+      this.attrs[0].dates = []
+      this.attrs[1].dates = []
     },
     async Verify(){
       try {
         let res = await axios.post("http://localhost:8023/api/registration", { login: this.userLogin, password: this.userPassword })
         this.verify = true
         localStorage.setItem("token", res.data.token)
+        this.getData()
       }catch (error) {
         console.log(error);
         this.isUserRegistred = true
@@ -225,6 +231,7 @@ export default{
         let res = await axios.post("http://localhost:8023/api/login", { login: this.userLogin, password: this.userPassword })
         this.verify = true
         localStorage.setItem("token", res.data.token)
+        this.getData()
       }catch (error) {
         console.log(error);
         this.showMessage = true
@@ -236,14 +243,27 @@ export default{
     } catch(error){
       console.log(error)
     }
+  },
+  async getData() {
+    if(localStorage.getItem("token") === null){
+      this.verify = false
+    } else {
+      this.verify = true
+      try{
+        let res = await axios.post("http://localhost:8023/api/getData", { token: localStorage.getItem("token") })
+        res.data.hardDays.forEach(date => this.attrs[0].dates.push(new Date(date)))
+        res.data.notHardDays.forEach(date => this.attrs[1].dates.push(new Date(date)))
+      } catch(error){
+        console.log(error)
+    }
+    }
   }
   },
+  async mounted() {
+    this.getData()
+  },
   async unmounted() {
-    try{
-      let res = await axios.post("http://localhost:8023/api/submitData", { token: localStorage.getItem("token"),hardDays: this.attrs[0].dates, notHardDays: this.attrs[1].dates })
-    } catch(error){
-      console.log(error)
-    }
+    this.submit()
   },
   computed: {
     isSearchActive(){
