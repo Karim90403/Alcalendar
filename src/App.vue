@@ -86,7 +86,7 @@
           </button>
           <input
             :value="inputValue"
-            class="bg-white text-gray-700 w-full py-1 px-2 appearance-none border rounded-r focus:outline-none focus:border-blue-500 dark:bg-gray-900 dark:border-gray-600 dark:text-white"
+            class="bg-white h text-gray-700 w-full py-1 px-2 appearance-none border rounded-r focus:outline-none focus:border-blue-500 dark:bg-gray-900 dark:border-gray-600 dark:text-white"
             readonly
           />
         </div>
@@ -129,11 +129,12 @@
         </div>
       </div>
     </div>
-    <v-calendar
+    <v-date-picker
       :columns="layout.columns"
       :rows="layout.rows"
       :max-date="new Date()"
       :attributes="attrs"
+      v-model="date" 
       :is-dark=isSearchActive
     />
   </div>
@@ -183,10 +184,12 @@ export default{
       this.attrs[1].dates = this.attrs[1].dates.filter((t) => t !== this.date)
       if(this.how == "heavily"){
         this.attrs[0].dates.push(this.date)
+        this.date = new Date()
         this.submit()
       }
       else{
         this.attrs[1].dates.push(this.date)
+        this.date = new Date()
         this.submit()
       }
     },
@@ -217,7 +220,7 @@ export default{
     },
     async Verify(){
       try {
-        let res = await axios.post("http://localhost:8023/api/registration", { login: this.userLogin, password: this.userPassword })
+        let res = await axios.post("/api/registration", { login: this.userLogin, password: this.userPassword })
         this.verify = true
         localStorage.setItem("token", res.data.token)
         this.getData()
@@ -228,7 +231,7 @@ export default{
     },
     async Login(){
       try {
-        let res = await axios.post("http://localhost:8023/api/login", { login: this.userLogin, password: this.userPassword })
+        let res = await axios.post("/api/login", { login: this.userLogin, password: this.userPassword })
         this.verify = true
         localStorage.setItem("token", res.data.token)
         this.getData()
@@ -239,7 +242,7 @@ export default{
     },
     async submit() {
     try{
-      let res = await axios.post("http://localhost:8023/api/submitData", { token: localStorage.getItem("token"), hardDays: this.attrs[0].dates, notHardDays: this.attrs[1].dates })
+      let res = await axios.post("/api/submitData", { token: localStorage.getItem("token"), hardDays: this.attrs[0].dates, notHardDays: this.attrs[1].dates })
     } catch(error){
       console.log(error)
     }
@@ -250,7 +253,7 @@ export default{
     } else {
       this.verify = true
       try{
-        let res = await axios.post("http://localhost:8023/api/getData", { token: localStorage.getItem("token") })
+        let res = await axios.post("/api/getData", { token: localStorage.getItem("token") })
         res.data.hardDays.forEach(date => this.attrs[0].dates.push(new Date(date)))
         res.data.notHardDays.forEach(date => this.attrs[1].dates.push(new Date(date)))
       } catch(error){
