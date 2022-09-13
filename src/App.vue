@@ -63,9 +63,9 @@
   </div>
 </div>
 <div v-else>
-  <h1 class="text-3xl text-center text-black my-4 dark:text-white">Алкалендарь</h1>
-  <div class="cursor-pointer absolute top-4 right-10 text-black dark:text-white text-xl" @click="signOut()">Выйти</div>
-  <div class="flex justify-between p-4">
+  <h1 class="text-3xl text-left text-black my-4 dark:text-white sm:text-center">Алкалендарь</h1>
+  <div class="cursor-pointer absolute top-5 right-5 text-black dark:text-white text-xl sm:top-4 sm:right-10" @click="signOut()">Выйти</div>
+  <div class="flex justify-between py-4 sm:py-0 sm:p-4">
     <div class="flex flex-col">
       <v-date-picker class="inline-block" v-model="date" :max-date="new Date()" :is-dark=isSearchActive>
       <template v-slot="{ inputValue, togglePopover }">
@@ -94,13 +94,13 @@
       </v-date-picker>
 
       <ul class="items-center w-full my-2 py-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-300 sm:flex dark:bg-gray-900 dark:border-gray-800 dark:text-white">
-          <li class="w-full border-b border-gray-300 sm:border-b-0 sm:border-r dark:border-gray-800">
+          <li class="w-full border-gray-300 sm:border-b-0 sm:border-r dark:border-gray-800">
               <div class="flex items-center pl-3">
                   <input id="heavily" v-model="how" type="radio" value="heavily" name="list-radio" class="cursor-pointer w-5 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:outline-none dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-900 dark:border-gray-500">
                   <label for="heavily" class="cursor-pointer py-3 ml-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300">Сильно </label>
               </div>
           </li>
-          <li class="w-full border-b border-gray-300 sm:border-b-0 sm:border-r dark:border-gray-600">
+          <li class="w-full border-gray-300 sm:border-b-0 sm:border-r dark:border-gray-600">
               <div class="flex items-center pl-3">
                   <input id="not-heavily" v-model="how" type="radio" value="not-heavily" name="list-radio" class="cursor-pointer w-5 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:outline-none dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-900 dark:border-gray-500">
                   <label for="not-heavily" class="cursor-pointer w-py-3 ml-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300">Чисто по пивку</label>
@@ -111,8 +111,8 @@
       <div class="bg-white text-gray-700 cursor-pointer py-2 px-2 text-center appearance-none border rounded-r focus:outline-none focus:border-garay-500 dark:bg-gray-900 dark:border-gray-600 dark:text-white" @click="append()">Добавить</div>
       <div class="text-xl text-center text-blacf mt-2 dark:text-white">Удалить</div>
       <div class="flex justify-between">
-        <div class="text-black text-ld mt-2 py-1 px-3 rounded cursor-pointer dark:text-white" :class="isHard ? 'bg-gray-300 dark:bg-gray-500' : 0" @click="showHard()">Сильно</div>
-        <div class="text-black text-ld mt-2 py-1 px-3 rounded cursor-pointer dark:text-white" :class="!isHard ? 'bg-gray-300 dark:bg-gray-500' : 0" @click="showNotHard()">Не сильно</div>
+        <div class="text-black text-ld mt-2 py-1 px-3 rounded cursor-pointer dark:text-white" :class="isHard ? 'bg-gray-300 dark:bg-gray-500' : 0" @click="showHard()">Сильно пил</div>
+        <div class="text-black text-ld mt-2 py-1 px-3 rounded cursor-pointer dark:text-white" :class="!isHard ? 'bg-gray-300 dark:bg-gray-500' : 0" @click="showNotHard()">Мало пил</div>
       </div>
       <div class="border-gray-300 border h-full p-3 rounded my-2 flex flex-col overflow-y-scroll dark:bg-gray-900 dark:border-gray-700">
         <div v-if="isHard">
@@ -136,6 +136,7 @@
       :attributes="attrs"
       v-model="date" 
       :is-dark=isSearchActive
+      class="w-1/2 sm:max-w-max sm:mx-4"
     />
   </div>
 </div>
